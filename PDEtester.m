@@ -1,0 +1,137 @@
+clear; clc; close all;
+
+%setting the time and length scale
+m = 0;
+x = [0:1e-6:1e-4]; 
+t = [0:0.5:10];
+
+%Solving the PDE and transferring values
+sol = pdepe(m,@pdex4pde,@pdex5ic,@pdex5bc,x,t);
+u1 = sol(:,:,1); %CO2
+u2 = sol(:,:,2); %HCO3^-
+u3 = sol(:,:,3); %CO3^2-
+u4 = sol(:,:,4); %OH^-
+pH = 14+log10(u4); %pH
+
+%2D graph of the pH at the surface of the electrode
+figure; 
+plot(t,pH(:,length(x)));
+title('pH');
+xlabel('Time t (s)');
+ylabel('pH');
+
+% %2D graph of the CO2 at the surface of the electrode
+figure;
+plot(t,u1(:,length(x)));
+title('Carbon Dioxide');
+xlabel('Time t (s)');
+ylabel('CO2 concentration (M)');
+
+%2D graph of the HCO3^- at the surface of the electrode
+% figure;
+% plot(t,u2(:,length(x)));
+% title('HCO_3^-');
+% xlabel('Time t (s)');
+% ylabel('CO2 concentration (M)');
+
+%2D graph of the CO3^2- at the surface of the electrode
+figure;
+plot(t,u3(:,length(x)));
+title('CO_3^2^-');
+xlabel('Time t (s)');
+ylabel('CO2 concentration (M)');
+
+%2D graph of the OH- at the surface of the electrode
+% figure;
+% plot(t,u3(:,length(x)));
+% title('OH^-');
+% xlabel('Time t (s)');
+% ylabel('CO2 concentration (M)');
+
+% figure;
+% surf(x,t,pH);
+% title('pH');
+% xlabel('Distance x (m)');
+% ylabel('Time t (s)');
+% zlabel('pH');
+
+%3D plot of CO2
+figure;
+surf(x,t,u1);
+title('CO2');
+xlabel('Distance x (m)');
+ylabel('Time t (s)');
+zlabel('CO2');
+
+%3D plot of HCO3^-
+figure;
+surf(x,t,u2);
+xlabel('Distance x (m)');
+ylabel('Time t (s)');
+zlabel('HCO3^-');
+
+%3D plot of CO3^2-
+figure;
+surf(x,t,u3);
+title('CO3^2-');
+xlabel('Distance x (m)');
+ylabel('Time t (s)');
+zlabel('CO3^2-');
+
+%3D plot of OH-
+figure;
+surf(x,t,u4);
+title('OH-');
+xlabel('Distance x (m)');
+ylabel('Time t (s)');
+zlabel('OH-');
+% --------------------------------------------------------------------------
+
+% function [c,f,s] = pdex4pde(x,t,u,DuDx)
+% c = [1; 1; 1; 1];
+% f = [1.91e-9; 9.23e-10; 1.19e-9; 5.27e-9] .* DuDx;
+% k1f = 5.93e3; 
+% k1r = 1.34e-4; 
+% k2f = 1e8;
+% k2r = 2.15e4;
+% F1 = -k1f*u(1)*u(4) + k1r*u(2);
+% F2 = -k2f*u(2)*u(4) + k2r*u(3);
+% s = [F1; -F1 + F2; -F2; F1 + F2];
+% end
+% --------------------------------------------------------------------------
+
+% function u0 = pdex4ic(x)
+% u0 = [0.0342; 0.499; 7.6e-4; 3.3e-7];
+% end
+% --------------------------------------------------------------------------
+
+% function u0 = pdex5ic(x)
+% u0 = [0.0342; 0.499; 7.6e-4; 3.3e-7];
+% end
+% --------------------------------------------------------------------------
+
+% function [pl,ql,pr,qr] = pdex4bc(xl,ul,xr,ur,t)
+% pl = [ul(1)-0.0342; ul(2)-0.499; ul(3)-7.6e-4; ul(4)-3.3e-7];
+% ql = [0; 0; 0; 0];
+% j = 100/1000;
+% F = 96485;
+% cefHCOO = 0.1;
+% cefCO = 0.05;
+% cefC2H4 = 0.2;
+% cefCH4 = 0.25;
+% zeffHCOO = 2;
+% zeffCO = 2;
+% zeffC2H4 = 12;
+% zeffCH4 = 8;
+% CO2F = (j/F)*(cefHCOO/zeffHCOO + cefCO/zeffCO + cefCH4/zeffCH4 + 2*cefC2H4/zeffC2H4);
+% OHF = (j/F)*(cefHCOO/zeffHCOO + 2*cefCO/zeffCO + 8*cefCH4/zeffCH4 + 12*cefC2H4/zeffC2H4);
+% pr = [CO2F; 0; 0; -OHF];
+% qr = [1; 1; 1; 1];
+% end
+
+% function [pl,ql,pr,qr] = pdex5bc(xl,ul,xr,ur,t)
+% pl = [ul(1)-0.024; ul(2)-0.475; ul(3)-0.04; ul(4)-3.3e-5];
+% ql = [0; 0; 0; 0];
+% pr = [0; 0; 0; 0];
+% qr = [1; 1; 1; 1];
+% end
