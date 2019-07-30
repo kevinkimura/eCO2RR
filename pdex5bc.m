@@ -44,16 +44,14 @@ zeffCH4 = 8;
 CO2F = (j/F)*(cefHCOO/zeffHCOO + cefCO/zeffCO + cefCH4/zeffCH4 + 2*cefC2H4/zeffC2H4);
 OHF = (j/F)*(cefHCOO/zeffHCOO + 2*cefCO/zeffCO + 8*cefCH4/zeffCH4 + 12*cefC2H4/zeffC2H4);
 
-%right boundary conditions for the CONSTANT case (Faraday's law at the electrode surface)
-pr = [CO2F; 0; 0; -OHF];    % why are they not divided by diffusion coefficient?? because f is already defined with diffusion coefficients
-qr = [1; 1; 1; 1];
+% right boundary conditions for the CONSTANT case (Faraday's law at the electrode surface)
+% pr = [CO2F; 0; 0; -OHF];    % why are they not divided by diffusion coefficient?? because f is already defined with diffusion coefficients
+% qr = [1; 1; 1; 1];
 
-%right boundary condition for the PULSE case
-% x = floor(t/5); % rounds the elements of x to the nearest integer. divide
-% t by some value to indicate pulse time
+% % right boundary condition for the PULSE case
+% x = floor(t/.5); % rounds the elements of x to the nearest integer. divide t by some value to indicate pulse time
 % for i = 1:length(x)
-%     if mod(x(i),2) == 0   % mod(x,y) returns x - (floor(x/y)*y) so it will
-%     equal 0 when x is an even number
+%     if mod(x(i),2) == 0   % mod(x,y) returns x - (floor(x/y)*y) so it will equal 0 when x is an even number
 %         pr = [CO2F; 0; 0; -OHF];
 %         qr = [1; 1; 1; 1];
 %     else
@@ -62,3 +60,21 @@ qr = [1; 1; 1; 1];
 %     end
 %     
 % end
+
+% % right boundary condition for the PULSE case using square function
+duty = 20;
+% f = 100;    % period (seconds) = 1/f = 5ms symmetric pulses = 10ms period
+f = 10; % period of 100ms aka 50ms pulses
+% f = .2; %5 second period
+%f = .1; % 10 second period
+x = square(2*pi*f*t,duty);
+for i = 1:length(x)
+    if x(i) > 0    
+        pr = [CO2F; 0; 0; -OHF];
+        qr = [1; 1; 1; 1];
+    else
+        pr = [0; 0; 0; 0];
+        qr = [1; 1; 1; 1];
+    end
+    
+end
