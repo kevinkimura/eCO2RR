@@ -49,11 +49,9 @@ pr = [CO2F; 0; 0; -OHF];    % why are they not divided by diffusion coefficient?
 qr = [1; 1; 1; 1];
 
 %right boundary condition for the PULSE case
-% x = floor(t/5); % rounds the elements of x to the nearest integer. divide
-% t by some value to indicate pulse time
+% x = floor(t/5); % rounds the elements of x to the nearest integer
 % for i = 1:length(x)
-%     if mod(x(i),2) == 0   % mod(x,y) returns x - (floor(x/y)*y) so it will
-%     equal 0 when x is an even number
+%     if mod(x(i),2) == 0   % 
 %         pr = [CO2F; 0; 0; -OHF];
 %         qr = [1; 1; 1; 1];
 %     else

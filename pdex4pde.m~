@@ -9,10 +9,8 @@ k1f = 5.93e3;
 k1r = 1.34e-4; 
 k2f = 1e8;
 k2r = 2.15e4;
- 
 F1 = -k1f*u(1)*u(4) + k1r*u(2);
 F2 = -k2f*u(2)*u(4) + k2r*u(3);
-% what is mu and where is it used??
 mu1 = 0; %CO2
 mu2 = -4.6e-8;
 mu3 = -8e-8;
