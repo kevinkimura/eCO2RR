@@ -69,7 +69,7 @@ f = 10; % period of 100ms aka 50ms pulses
 %f = .1; % 10 second period
 x = square(2*pi*f*t,duty);
 for i = 1:length(x)
-    if x(i) > 0    
+    if x(i) < 0    
         pr = [CO2F; 0; 0; -OHF];
         qr = [1; 1; 1; 1];
     else
